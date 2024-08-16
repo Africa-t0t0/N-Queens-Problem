@@ -35,7 +35,7 @@ class QueensSolution(object):
             print(array)
 
     @staticmethod
-    def _set_queen(position_x: int, position_y: int, table_ls: list):
+    def _set_queen_greedy(position_x: int, position_y: int, table_ls: list):
         # set the X axis
         table_ls[position_x] = [1 for _ in table_ls[position_x]]
         # set the Y axis
@@ -89,9 +89,9 @@ class QueensSolution(object):
         for index in range(len(table_ls)):
             for index2 in range(len(table_ls)):
                 if table_ls[index][index2] == 0:
-                    table_ls = self._set_queen(position_x=index,
-                                               position_y=index2,
-                                               table_ls=table_ls)
+                    table_ls = self._set_queen_greedy(position_x=index,
+                                                      position_y=index2,
+                                                      table_ls=table_ls)
                     max_queens += 1
         self._set_max_queens(value=max_queens)
         self._print_current_table(table_ls)
