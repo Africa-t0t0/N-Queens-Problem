@@ -16,10 +16,17 @@ class QueensSolution(object):
             self._set_table()
         return self._table_ls
 
+    def _get_max_queens(self) -> int:
+        max_queens = self._max_queens
+        return max_queens
+
     def _set_table(self) -> None:
         large = self._get_large()
         table = [[0 for _ in range(large)] for _ in range(large)]
         self._table_ls = table
+
+    def _set_max_queens(self, value: int) -> None:
+        self._max_queens = value
 
     @staticmethod
     def _print_current_table(table_ls: list) -> None:
@@ -29,7 +36,6 @@ class QueensSolution(object):
 
     @staticmethod
     def _set_queen(position_x: int, position_y: int, table_ls: list):
-
         # set the X axis
         table_ls[position_x] = [1 for _ in table_ls[position_x]]
         # set the Y axis
@@ -44,11 +50,9 @@ class QueensSolution(object):
         aux_y_up_left = position_y
         aux_y_down_right = position_y
         aux_y_down_left = position_y
-        flag_change = False
         while True:
             flag_change = False
             # check up right diagonal
-            print("current x", aux_x_down_left, "current y", aux_y_down_left)
             if aux_y_up_right + 1 < len(table_ls) and (aux_x_up_right - 1 < len(table_ls) and (aux_x_up_right > 0)):
                 aux_y_up_right += 1
                 aux_x_up_right -= 1
@@ -75,17 +79,22 @@ class QueensSolution(object):
 
             if not flag_change:
                 break
-
+        table_ls[position_x][position_y] = "X"
         return table_ls
 
-    def resolve_problem(self):
+    def greedy_solution(self):
         table_ls = self._get_table()
+        max_queens = 0
 
-        self._set_queen(position_x=1,
-                       position_y=2,
-                       table_ls=table_ls)
-
+        for index in range(len(table_ls)):
+            for index2 in range(len(table_ls)):
+                if table_ls[index][index2] == 0:
+                    table_ls = self._set_queen(position_x=index,
+                                               position_y=index2,
+                                               table_ls=table_ls)
+                    max_queens += 1
+        self._set_max_queens(value=max_queens)
         self._print_current_table(table_ls)
 
 
-QueensSolution(large=4).resolve_problem()
+QueensSolution(large=12).greedy_solution()
