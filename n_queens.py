@@ -22,8 +22,8 @@ class QueensSolution(object):
 
     def _set_table(self) -> None:
         large = self._get_large()
-        table = [[0 for _ in range(large)] for _ in range(large)]
-        self._table_ls = table
+        table_ls = [[0 for _ in range(large)] for _ in range(large)]
+        self._table_ls = table_ls
 
     def _set_max_queens(self, value: int) -> None:
         self._max_queens = value
@@ -34,8 +34,13 @@ class QueensSolution(object):
         for array in table_ls:
             print(array)
 
+    def _get_empty_table(self) -> list:
+        large = self._get_large()
+        ls = [[0 for _ in range(large)] for _ in range(large)]
+        return ls
+
     @staticmethod
-    def _set_queen_greedy(position_x: int, position_y: int, table_ls: list):
+    def _set_queen(position_x: int, position_y: int, table_ls: list):
         # set the X axis
         table_ls[position_x] = [1 for _ in table_ls[position_x]]
         # set the Y axis
@@ -82,19 +87,52 @@ class QueensSolution(object):
         table_ls[position_x][position_y] = "X"
         return table_ls
 
+    def _solve_iteration(self, position_x: int, position_y: int):
+        table_ls = self._get_empty_table()
+        max_queens = 0
+
+        # we start by setting the queen in the initial position
+        initial_table_ls = self._set_queen(position_x=position_x,
+                                           position_y=position_y,
+                                           table_ls=table_ls)
+
+        aux_table_ls = initial_table_ls.copy()
+        for index_x in range(0, len(table_ls)):
+            for index_y in range(0, len(table_ls)):
+                if aux_table_ls[index_x][index_y] == 0:
+                    aux_table_ls = self._set_queen(position_x=index_x,
+                                                   position_y=index_y,
+                                                   table_ls=aux_table_ls)
+                    max_queens += 1
+        return aux_table_ls, max_queens
+
+    def backtracking_solution(self):
+        large = self._get_large()
+        max_queens = 0
+        best_table = list()
+        for index_x in range(large):
+            for index_y in range(large):
+                iteration_table, iteration_queens = self._solve_iteration(position_x=index_x,
+                                                                          position_y=index_y)
+
+                if iteration_queens > max_queens:
+                    best_table = iteration_table
+                    max_queens = iteration_queens
+        self._print_current_table(table_ls=best_table)
+
     def greedy_solution(self):
         table_ls = self._get_table()
         max_queens = 0
 
-        for index in range(len(table_ls)):
-            for index2 in range(len(table_ls)):
-                if table_ls[index][index2] == 0:
-                    table_ls = self._set_queen_greedy(position_x=index,
-                                                      position_y=index2,
-                                                      table_ls=table_ls)
+        for index_x in range(len(table_ls)):
+            for index_y in range(len(table_ls)):
+                if table_ls[index_x][index_y] == 0:
+                    table_ls = self._set_queen(position_x=index_x,
+                                               position_y=index_y,
+                                               table_ls=table_ls)
                     max_queens += 1
         self._set_max_queens(value=max_queens)
         self._print_current_table(table_ls)
 
 
-QueensSolution(large=12).greedy_solution()
+QueensSolution(large=5).backtracking_solution()
