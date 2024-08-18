@@ -29,8 +29,8 @@ class QueensSolution(object):
         self._max_queens = value
 
     @staticmethod
-    def _print_current_table(table_ls: list) -> None:
-        print("------------------")
+    def _print_current_table(table_ls: list, process_type: str) -> None:
+        print(f"-------{process_type}--------")
         for array in table_ls:
             print(array)
 
@@ -118,7 +118,8 @@ class QueensSolution(object):
                 if iteration_queens > max_queens:
                     best_table = iteration_table
                     max_queens = iteration_queens
-        self._print_current_table(table_ls=best_table)
+        self._print_current_table(table_ls=best_table,
+                                  process_type="Backtracking solution")
 
     def greedy_solution(self):
         table_ls = self._get_table()
@@ -132,7 +133,10 @@ class QueensSolution(object):
                                                table_ls=table_ls)
                     max_queens += 1
         self._set_max_queens(value=max_queens)
-        self._print_current_table(table_ls)
+        self._print_current_table(table_ls=table_ls,
+                                  process_type="Greedy solution")
 
 
-QueensSolution(large=5).backtracking_solution()
+QueensSolution(large=4).backtracking_solution()
+
+QueensSolution(large=4).greedy_solution()
