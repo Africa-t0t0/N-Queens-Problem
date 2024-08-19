@@ -137,6 +137,8 @@ class QueensSolution(object):
                                   process_type="Greedy solution")
 
 
-QueensSolution(large=4).backtracking_solution()
+table_large = 150
 
-QueensSolution(large=4).greedy_solution()
+QueensSolution(large=table_large).backtracking_solution()
+
+QueensSolution(large=table_large).greedy_solution()
